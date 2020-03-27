@@ -44,6 +44,8 @@
                             style="width: 59.75px;" aria-label="Statut: activate to sort column ascending">Statut</th>
                           <th class="sorting" tabindex="0" aria-controls="datatable-basic" rowspan="1" colspan="1"
                             style="width: 128.5px;" aria-label="Tags: activate to sort column ascending">Tags</th>
+                          <th class="sorting" tabindex="0" aria-controls="datatable-basic" rowspan="1" colspan="1"
+                            style="width: 20px;" aria-label="Actions: activate to sort column ascending"></th>
                         </tr>
                       </thead>
                       <tfoot>
@@ -53,6 +55,7 @@
                           <th rowspan="1" colspan="1">Date de fin</th>
                           <th rowspan="1" colspan="1">Statut</th>
                           <th rowspan="1" colspan="1">Tags</th>
+                          <th rowspan="1" colspan="1"></th>
                         </tr>
                       </tfoot>
                       <tbody>
@@ -108,42 +111,44 @@
               },
               {
                 data: "tags"
+              },
+              {
+                mRender: function (data, type, row) {
+                  return '<button class="btn btn-sm btn-warning updateTodo" data-id="' + row._id + '" title="Mise à jour"><i class="ni ni-ruler-pencil text-white"></i></button><button class="btn btn-sm btn-danger deleteTodo" data-id="' + row._id + '" title="Suppression"><i class="ni ni-fat-remove text-white"></i></button>'
+                }
               }
             ],
             keys: !0,
-            select: {
-              style: "multi"
-            },
             language: {
-                        "sEmptyTable": "Aucune donnée disponible dans le tableau",
-                        "sInfo": "Affichage de l'élément _START_ à _END_ sur _TOTAL_ éléments",
-                        "sInfoEmpty": "Affichage de l'élément 0 à 0 sur 0 élément",
-                        "sInfoFiltered": "(filtré à partir de _MAX_ éléments au total)",
-                        "sInfoPostFix": "",
-                        "sInfoThousands": ",",
-                        "sLengthMenu": "Afficher _MENU_ éléments",
-                        "sLoadingRecords": "Chargement...",
-                        "sProcessing": "Traitement...",
-                        "sSearch": "Rechercher :",
-                        "sZeroRecords": "Aucun élément correspondant trouvé",
-                        "oPaginate": {
-                            "sFirst": "Premier",
-                            "sLast": "Dernier",
-                            "sNext": "<i class='fas fa-angle-right'>",
-                            "sPrevious": "<i class='fas fa-angle-left'>"
-                        },
-                        "oAria": {
-                            "sSortAscending": ": activer pour trier la colonne par ordre croissant",
-                            "sSortDescending": ": activer pour trier la colonne par ordre décroissant"
-                        },
-                        "select": {
-                            "rows": {
-                                "_": "%d lignes sélectionnées",
-                                "0": "Aucune ligne sélectionnée",
-                                "1": "1 ligne sélectionnée"
-                            }
-                        }
-                    }
+              "sEmptyTable": "Aucune donnée disponible dans le tableau",
+              "sInfo": "Affichage de l'élément _START_ à _END_ sur _TOTAL_ éléments",
+              "sInfoEmpty": "Affichage de l'élément 0 à 0 sur 0 élément",
+              "sInfoFiltered": "(filtré à partir de _MAX_ éléments au total)",
+              "sInfoPostFix": "",
+              "sInfoThousands": ",",
+              "sLengthMenu": "Afficher _MENU_ éléments",
+              "sLoadingRecords": "Chargement...",
+              "sProcessing": "Traitement...",
+              "sSearch": "Rechercher :",
+              "sZeroRecords": "Aucun élément correspondant trouvé",
+              "oPaginate": {
+                "sFirst": "Premier",
+                "sLast": "Dernier",
+                "sNext": "<i class='fas fa-angle-right'>",
+                "sPrevious": "<i class='fas fa-angle-left'>"
+              },
+              "oAria": {
+                "sSortAscending": ": activer pour trier la colonne par ordre croissant",
+                "sSortDescending": ": activer pour trier la colonne par ordre décroissant"
+              },
+              "select": {
+                "rows": {
+                  "_": "%d lignes sélectionnées",
+                  "0": "Aucune ligne sélectionnée",
+                  "1": "1 ligne sélectionnée"
+                }
+              }
+            }
           })
       }(),
         DatatableButtons = function () {
@@ -169,6 +174,32 @@
             })
               .DataTable(e))
         }();
+
+      $(".deleteTodo").on('click', function () {
+        var id = $(this).data('id');
+        console.log("DELETE ID -> " + id);
+
+        // DELETE todo
+        httpDeleteAsync("http://localhost:5000/api/v1/todo/"+id, function(callback) {
+          console.log("CALLBACK -> " + callback);
+          location.reload();
+        });
+      });
+
+      $(".updateTodo").on('click', function () {
+        var id = $(this).data('id');
+        console.log("UPDATE ID -> " + id);
+      });
+    }
+
+    function httpDeleteAsync(url, callback) {
+      var xmlHttp = new XMLHttpRequest();
+      xmlHttp.onreadystatechange = function () {
+        if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
+          callback(xmlHttp.responseText);
       }
+      xmlHttp.open("DELETE", url, true); // true for asynchronous 
+      xmlHttp.send(null);
+    }
   </script>
 </body>
