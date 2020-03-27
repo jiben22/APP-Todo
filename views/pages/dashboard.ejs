@@ -177,12 +177,17 @@
 
       $(".deleteTodo").on('click', function () {
         var id = $(this).data('id');
+        var row = $(this).parent().parent();
         console.log("DELETE ID -> " + id);
 
         // DELETE todo
         httpDeleteAsync("http://localhost:5000/api/v1/todo/"+id, function(callback) {
-          console.log("CALLBACK -> " + callback);
-          location.reload();
+          let response = JSON.parse(callback);
+          if(response.success === 'true') {
+            row.remove();
+          } else {
+            alert(response.message);
+          }
         });
       });
 
