@@ -128,7 +128,6 @@
       }
     });
 
-    //TODO: when tags list is OK
     // Get todo id
     let url = new URL(window.location.href);
     const id = Object.freeze(url.searchParams.get("id"));
@@ -155,7 +154,6 @@
           window.location.replace("/");
         },
         error: function (data) {
-          console.log(data);
           alert(data.responseJSON.message);
         }
       });

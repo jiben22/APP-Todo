@@ -1,0 +1,88 @@
+<body>
+  <!-- Sidenav -->
+  <% include ../partials/sidebar %>
+  <!-- Main content -->
+  <div class="main-content">
+    <!-- Top navbar -->
+    <% include ../partials/navbar %>
+    <!-- Header -->
+    <div class="header bg-gradient-primary pb-8 pt-5 pt-md-8">
+      <div class="container-fluid">
+        <div class="header-body">
+        </div>
+      </div>
+    </div>
+    <!-- Page content -->
+    <div class="container-fluid mt--8">
+      <div class="row">
+        <div class="col">
+          <div class="card-wrapper">
+            <!-- Custom form validation -->
+            <div class="card">
+              <!-- Card header -->
+              <div class="card-header">
+                <h3 class="mb-0">Ajouter un tag</h3>
+              </div>
+              <!-- Card body -->
+              <div class="card-body">
+                <form class="needs-validation" novalidate="" id="addTag">
+                  <div class="form-row">
+                    <div class="col-md-6 mb-3">
+                      <div class="form-group">
+                        <label class="form-control-label" for="title">Titre</label>
+                        <input type="text" class="form-control" name="title" id="title" placeholder="Titre" required="">
+                      </div>
+                    </div>
+                  </div>
+                  <button class="btn btn-primary" type="button" id="submitButton">Ajouter</button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Footer -->
+      <% include ../partials/footer %>
+    </div>
+  </div>
+  <!-- Include scripts -->
+  <% include ../partials/scripts %>
+  <script>
+    const apiURL = 'http://localhost:5000/api/v1';
+
+    const httpMethod = Object.freeze({
+      GET: 'GET',
+      POST: 'POST',
+      PUT: 'PUT',
+      DELETE: 'DELETE',
+    });
+
+    // HTTP method asynchronous
+    function httpAsync(url, method, callback) {
+      const xmlHttp = new XMLHttpRequest();
+      // eslint-disable-next-line func-names
+      xmlHttp.onreadystatechange = function () {
+        if (xmlHttp.readyState === 4 && xmlHttp.status === 200) callback(xmlHttp.responseText);
+      };
+      xmlHttp.open(method, url, true); // true for asynchronous
+      xmlHttp.send(null);
+    }
+
+    // Add tag
+    $('#submitButton').click(function () {
+      $.ajax({
+        url: apiURL + '/tags',
+        type: 'POST',
+        dataType: 'json',
+        data: $('form#addTag').serialize(),
+        success: function (data) {
+          console.log(data.message);
+          window.location.replace("/");
+        },
+        error: function (data) {
+          alert(data.responseJSON.message);
+        }
+      });
+    });
+  </script>
+</body>

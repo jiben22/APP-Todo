@@ -17,7 +17,7 @@ router.get('/update-todo', (req, res) => {
 });
 
 /* GET add tag page. */
-router.get('/dd-tag', (req, res) => {
+router.get('/add-tag', (req, res) => {
   res.render('pages/addTag');
 });
 /* GET update tag page. */
