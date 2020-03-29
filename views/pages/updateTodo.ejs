@@ -21,11 +21,11 @@
             <div class="card">
               <!-- Card header -->
               <div class="card-header">
-                <h3 class="mb-0">Ajouter une tâche</h3>
+                <h3 class="mb-0">Mise à jour de la tâche</h3>
               </div>
               <!-- Card body -->
               <div class="card-body">
-                <form class="needs-validation" novalidate="" id="addTodo">
+                <form class="needs-validation" novalidate="" id="updateTodo">
                   <div class="form-row">
                     <div class="col-md-6 mb-3">
                       <div class="form-group">
@@ -71,7 +71,7 @@
                       </div>
                     </div>
                   </div>
-                  <button class="btn btn-primary" type="button" id="submitButton">Ajouter</button>
+                  <button class="btn btn-primary" type="button" id="submitButton">Modifier</button>
                 </form>
               </div>
             </div>
@@ -105,6 +105,17 @@
       xmlHttp.send(null);
     }
 
+    function setDataToForm(todo) {
+      $('#title').val(todo.title);
+      $('#dateBegin').val(todo.dateBegin);
+      $('#dateEnd').val(todo.dateEnd);
+      $('#statut').val(todo.statut);
+      $.each(todo.tags.toString().split(","), function (key, value) {
+        let tagValue = value.charAt(0).toUpperCase() + value.slice(1);
+        $("#selectTags option[value='" + tagValue + "']").prop("selected", true);
+      });
+    }
+
     // GET tags
     httpAsync(apiURL + '/tags', httpMethod.GET, function (callback) {
       let response = JSON.parse(callback);
@@ -117,18 +128,34 @@
       }
     });
 
-    // Add todo
+    //TODO: when tags list is OK
+    // Get todo id
+    let url = new URL(window.location.href);
+    const id = Object.freeze(url.searchParams.get("id"));
+
+    // GET todo
+    httpAsync(apiURL + '/todos/' + id, httpMethod.GET, function (callback) {
+      let response = JSON.parse(callback);
+      if (response.success === 'true') {
+        setDataToForm(response.todo);
+      } else {
+        alert(response.message);
+      }
+    });
+
+    // Update todo
     $('#submitButton').click(function () {
       $.ajax({
-        url: apiURL + '/todos',
-        type: 'POST',
+        url: apiURL + '/todos/' + id,
+        type: 'PUT',
         dataType: 'json',
-        data: $('form#addTodo').serialize(),
+        data: $('form#updateTodo').serialize(),
         success: function (data) {
           console.log(data.message);
           window.location.replace("/");
         },
         error: function (data) {
+          console.log(data);
           alert(data.responseJSON.message);
         }
       });

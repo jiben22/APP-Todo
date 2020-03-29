@@ -75,136 +75,152 @@
   <!-- Include scripts -->
   <% include ../partials/scripts %>
   <script>
+    const apiURL = 'http://localhost:5000/api/v1';
+
+    const httpMethod = Object.freeze({
+      GET: 'GET',
+      POST: 'POST',
+      PUT: 'PUT',
+      DELETE: 'DELETE',
+    });
+
+    // HTTP method asynchronous
+    function httpAsync(url, method, callback) {
+      const xmlHttp = new XMLHttpRequest();
+      // eslint-disable-next-line func-names
+      xmlHttp.onreadystatechange = function () {
+        if (xmlHttp.readyState === 4 && xmlHttp.status === 200) callback(xmlHttp.responseText);
+      };
+      xmlHttp.open(method, url, true); // true for asynchronous
+      xmlHttp.send(null);
+    }
+
     $(document).ready(function () {
+      // Load todos for the datatable
       $.ajax({
-        url: 'http://localhost:5000/api/v1/todos',
+        url: `${apiURL}/todos`,
         type: 'GET',
         crossDomain: true,
         dataType: 'json',
-        success: function (data) {
+        success(data) {
           bindtoDatatable(data.todos);
-        }
+        },
       });
     });
 
+    // Bind data to datatable
     function bindtoDatatable(data) {
-      var DatatableBasic = function () {
-        var e = $("#datatable-basic");
-        e.length && e.on("init.dt", function () {
-          $("div.dataTables_length select")
-            .removeClass("custom-select custom-select-sm")
-        })
-          .DataTable({
-            aaData: data,
-            columns: [
-              {
-                data: "title"
-              },
-              {
-                data: "dateBegin"
-              },
-              {
-                data: "dateEnd"
-              },
-              {
-                data: "statut"
-              },
-              {
-                data: "tags"
-              },
-              {
-                mRender: function (data, type, row) {
-                  return '<button class="btn btn-sm btn-warning updateTodo" data-id="' + row._id + '" title="Mise à jour"><i class="ni ni-ruler-pencil text-white"></i></button><button class="btn btn-sm btn-danger deleteTodo" data-id="' + row._id + '" title="Suppression"><i class="ni ni-fat-remove text-white"></i></button>'
-                }
-              }
-            ],
-            keys: !0,
-            language: {
-              "sEmptyTable": "Aucune donnée disponible dans le tableau",
-              "sInfo": "Affichage de l'élément _START_ à _END_ sur _TOTAL_ éléments",
-              "sInfoEmpty": "Affichage de l'élément 0 à 0 sur 0 élément",
-              "sInfoFiltered": "(filtré à partir de _MAX_ éléments au total)",
-              "sInfoPostFix": "",
-              "sInfoThousands": ",",
-              "sLengthMenu": "Afficher _MENU_ éléments",
-              "sLoadingRecords": "Chargement...",
-              "sProcessing": "Traitement...",
-              "sSearch": "Rechercher :",
-              "sZeroRecords": "Aucun élément correspondant trouvé",
-              "oPaginate": {
-                "sFirst": "Premier",
-                "sLast": "Dernier",
-                "sNext": "<i class='fas fa-angle-right'>",
-                "sPrevious": "<i class='fas fa-angle-left'>"
-              },
-              "oAria": {
-                "sSortAscending": ": activer pour trier la colonne par ordre croissant",
-                "sSortDescending": ": activer pour trier la colonne par ordre décroissant"
-              },
-              "select": {
-                "rows": {
-                  "_": "%d lignes sélectionnées",
-                  "0": "Aucune ligne sélectionnée",
-                  "1": "1 ligne sélectionnée"
-                }
-              }
-            }
-          })
-      }(),
-        DatatableButtons = function () {
-          var e, a = $("#datatable-buttons");
-          a.length && (e =
-          {
-            lengthChange: !1,
-            dom: "Bfrtip",
-            buttons: ["copy", "print"],
-            language:
-            {
-              paginate:
-              {
-                previous: "<i class='fas fa-angle-left'>",
-                next: "<i class='fas fa-angle-right'>"
-              }
-            }
-          },
-            a.on("init.dt", function () {
-              $(".dt-buttons .btn")
-                .removeClass("btn-secondary")
-                .addClass("btn-sm btn-default")
+      let DatatableBasic = (function () {
+        let e = $('#datatable-basic');
+        e.length &&
+          e
+            .on('init.dt', function () {
+              $('div.dataTables_length select').removeClass('custom-select custom-select-sm');
             })
-              .DataTable(e))
-        }();
+            .DataTable({
+              aaData: data,
+              columns: [{
+                data: 'title',
+              },
+              {
+                data: 'dateBegin',
+              },
+              {
+                data: 'dateEnd',
+              },
+              {
+                data: 'statut',
+              },
+              {
+                data: 'tags',
+              },
+              {
+                mRender(data, type, row) {
+                  return `<button class="btn btn-sm updateTodo" data-id="${row._id}" title="Mise à jour"><i class="fas fa-edit text-warning"></i></button><button class="btn btn-sm deleteTodo" data-id="${row._id}" title="Suppression"><i class="fas fa-times text-danger"></i></button>`;
+                },
+              },
+              ],
+              keys: !0,
+              language: {
+                sEmptyTable: 'Aucune donnée disponible dans le tableau',
+                sInfo: "Affichage de l'élément _START_ à _END_ sur _TOTAL_ éléments",
+                sInfoEmpty: "Affichage de l'élément 0 à 0 sur 0 élément",
+                sInfoFiltered: '(filtré à partir de _MAX_ éléments au total)',
+                sInfoPostFix: '',
+                sInfoThousands: ',',
+                sLengthMenu: 'Afficher _MENU_ éléments',
+                sLoadingRecords: 'Chargement...',
+                sProcessing: 'Traitement...',
+                sSearch: 'Rechercher :',
+                sZeroRecords: 'Aucun élément correspondant trouvé',
+                oPaginate: {
+                  sFirst: 'Premier',
+                  sLast: 'Dernier',
+                  sNext: "<i class='fas fa-angle-right'>",
+                  sPrevious: "<i class='fas fa-angle-left'>",
+                },
+                oAria: {
+                  sSortAscending: ': activer pour trier la colonne par ordre croissant',
+                  sSortDescending: ': activer pour trier la colonne par ordre décroissant',
+                },
+                select: {
+                  rows: {
+                    _: '%d lignes sélectionnées',
+                    '0': 'Aucune ligne sélectionnée',
+                    '1': '1 ligne sélectionnée',
+                  },
+                },
+              },
+            });
+      })(),
+        DatatableButtons = (function () {
+          let e,
+            a = $('#datatable-buttons');
+          a.length &&
+            ((e = {
+              lengthChange: !1,
+              dom: 'Bfrtip',
+              buttons: ['copy', 'print'],
+              language: {
+                paginate: {
+                  previous: "<i class='fas fa-angle-left'>",
+                  next: "<i class='fas fa-angle-right'>",
+                },
+              },
+            }),
+              a
+                .on('init.dt', function () {
+                  $('.dt-buttons .btn')
+                    .removeClass('btn-secondary')
+                    .addClass('btn-sm btn-default');
+                })
+                .DataTable(e));
+        })();
 
-      $(".deleteTodo").on('click', function () {
-        var id = $(this).data('id');
-        var row = $(this).parent().parent();
-        console.log("DELETE ID -> " + id);
+      // Delete todo
+      $('.deleteTodo').on('click', function () {
+        let id = $(this).data('id');
+        let row = $(this)
+          .parent()
+          .parent();
 
         // DELETE todo
-        httpDeleteAsync("http://localhost:5000/api/v1/todo/"+id, function(callback) {
+        const apiURLDelete = `${apiURL}/todos/${id}`;
+        httpAsync(apiURLDelete, httpMethod.DELETE, function (callback) {
           let response = JSON.parse(callback);
-          if(response.success === 'true') {
+          if (response.success === 'true') {
             row.remove();
-          } else {
-            alert(response.message);
           }
+
+          alert(response.message);
         });
       });
 
-      $(".updateTodo").on('click', function () {
-        var id = $(this).data('id');
-        console.log("UPDATE ID -> " + id);
+      // Update todo
+      $('.updateTodo').on('click', function () {
+        const id = $(this).data('id');
+        window.location.href = `/update-todo?id=${id}`;
       });
-    }
-
-    function httpDeleteAsync(url, callback) {
-      var xmlHttp = new XMLHttpRequest();
-      xmlHttp.onreadystatechange = function () {
-        if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
-          callback(xmlHttp.responseText);
-      }
-      xmlHttp.open("DELETE", url, true); // true for asynchronous 
-      xmlHttp.send(null);
     }
   </script>
 </body>
