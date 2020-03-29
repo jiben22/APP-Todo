@@ -21,6 +21,16 @@ Task management app - NodeJS
 
 ## How to run
 
+### API-Todo
+
+`cd API-todo`
+
+`npm run start`
+
+### APP-Todo
+
+`cd APP-Todo`
+
 `npm run start`
 
 Go to [http://localhost:8000](http://localhost:8000)
