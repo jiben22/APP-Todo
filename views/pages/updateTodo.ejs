@@ -53,8 +53,8 @@
                   <div class="form-row">
                     <div class="col-md-6 mb-3">
                       <div class="form-group">
-                        <label class="form-control-label" for="statut">Statut</label>
-                        <select class="form-control" name="statut" id="statut" required="">
+                        <label class="form-control-label" for="status">Status</label>
+                        <select class="form-control" name="status" id="status" required="">
                           <option>Non précisé</option>
                           <option>Une tâche est requise</option>
                           <option>En cours</option>
@@ -109,7 +109,7 @@
       $('#title').val(todo.title);
       $('#dateBegin').val(todo.dateBegin);
       $('#dateEnd').val(todo.dateEnd);
-      $('#statut').val(todo.statut);
+      $('#status').val(todo.status);
       $.each(todo.tags.toString().split(","), function (key, value) {
         let tagValue = value.charAt(0).toUpperCase() + value.slice(1);
         $("#selectTags option[value='" + tagValue + "']").prop("selected", true);
