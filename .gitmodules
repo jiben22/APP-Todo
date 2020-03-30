@@ -1,3 +1,3 @@
-[submodule "API-Todo"]
-	path = API-Todo
-	url = https://github.com/jiben22/API-Todo
+[submodule "api-tasks-manager"]
+	path = api-tasks-manager
+	url = https://github.com/jiben22/api-tasks-manager
