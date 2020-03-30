@@ -1,35 +1,40 @@
-# APP-Todo
+# Tasks management application
+
 ![version](https://img.shields.io/badge/version-1.0.0-blue.svg)  ![license](https://img.shields.io/badge/license-MIT-blue.svg) 
 
-![Dashboard Image](git/images/dashboard.png)
+Tasks management application - NodeJS
 
-Task management app - NodeJS
+## Dashboard
+
+![Dashboard Image](git/images/dashboard.png)
 
 ## Installation
 
 1. You need `Node.js` **(at least 12.x version)** installed on your machine, if you don't have it, you should install it - download [link](https://nodejs.org/en/download/)
 
-2. [Clone the project **recursively** from github](https://github.com/jiben22/APP-Todo) or [download the archive](https://github.com/jiben22/APP-Todo)
+2. You need `Redis` installed on your machine, if you don't have it, you should install it - download [link](https://redis.io/download)
 
-   `git clone https://github.com/jiben22/APP-Todo --recursive`
+3. [Clone the project **recursively** from github](https://github.com/jiben22/app-tasks-manager) or [download the archive](https://github.com/jiben22/app-tasks-manager)
 
-3. `cd` to your downloaded Task management app
+   `git clone https://github.com/jiben22/app-tasks-manager --recursive`
 
-4. Install necessary dependencies:
+4. `cd` to your downloaded Task management app
 
-   - **Via node `npm` package manager** - Run `npm install` on the project root
+5. Install necessary dependencies:
+
+   - **Via node `npm` package manager** - Run `npm install` on the project root and `app-tasks-manager/api-tasks-manager`
 
 ## How to run
 
-### API-Todo
+### Running Tasks management API  before
 
-`cd API-todo`
+`cd app-tasks-manager/api-tasks-manager`
 
 `npm run start`
 
-### APP-Todo
+### Running Tasks management application
 
-`cd APP-Todo`
+`cd app-tasks-manager`
 
 `npm run start`
 
