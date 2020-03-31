@@ -26,7 +26,7 @@ Tasks management application - NodeJS
 
 ## How to run
 
-### Running Tasks management API  before
+### Running Tasks management API before
 
 `cd app-tasks-manager/api-tasks-manager`
 
@@ -39,6 +39,10 @@ Tasks management application - NodeJS
 `npm run start`
 
 Go to [http://localhost:8000](http://localhost:8000)
+
+## Demo
+
+https://app-tasks-manager.herokuapp.com/
 
 ## Licensing
 
